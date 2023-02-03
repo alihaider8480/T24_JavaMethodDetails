@@ -1,0 +1,131 @@
+Validation Routine = Validatefiled 
+input Rountine = ValidateRecord (WHEN PRESS VALIDATE BUTTON) ATTACH INPUT ROUTINE AND IT CANNOT BE EXECTUE COMMIT BUTTON IT WILL RUN JUST VALIDATE BUTTON
+Check Routine = DefaultFieldValues
+Auth Routine = UpdatelookupTable
+
+
+
+
+																		Record LifeCycle
+
+updateCoreRecord(Deprecated)
+		        This interface enables the implementer to define one or more records to be input during the current transaction using the specified versions and ids.<br>
+			* If no version is specified then no action will be taken. <br>
+			* This interface is invoked when a record is authorised.<br>
+			* The EB.API hooks used by this interface are EB.TABLE.PROCEDURES.BEF.AUTH.HOOK and VERSION.BEFORE.AUTH.RTN.HOOK.<br>
+			* The T24 fields specifying this hook are the BEF.AUTH.PROC field in EB.TABLE.PROCEDURES and BEFORE.AUTH.RTN in VERSION and VERSION.CONTROL.<br>
+			* If an exception is thrown in the implementing class it will be treated as an error.<br>
+
+getTransactionMessage()*
+		    This interface enables the implementer to customize the message displayed on the screen during the transaction completion.<br>
+			* This interface is invoked when a transaction is completed.<br>
+			* The EB.API hooks used by this interface are EB.BROWSER.CUS.MSG.HOOK.<br>
+			* The T24 fields specifying this hook are the HOOK.ROUTINE field in EB.BROWSER.CUSTOMISE.MSG.<br>
+
+postUpdateRequest()
+			* is method ko hum kisi bhi table ma asynchronous mode ma update ka lia use kart hai.
+			* ya method request karta hai OFS.message.queue ma write karna ka lia
+			* jab hum is request ko post karta hai matlab chalata hai to huma run karenga OFS.message.service.
+			* or version ki id comma , version sa na bani ho.
+			* or OFS.SOURCE ki id us transaction ma lazmi honi cheya agar mention na ho ya invalid ho to request stop ho jae gi.
+			* 
+
+
+
+			* This interface enables the to post the request to update the records of any table in asynchronous mode. <br>
+			* This interface writes the request into the file OFS.MESSAGE.QUEUE.
+			* To post this request into the T24, user has to run the OFS.MESSAGE.SERVICE service.
+			* The versionId should not be a comma version in transaction data.
+			* The OFS.SOURCE id should be specied through the transactionData. If no OFS.SOURCE mentioned or invalid OFS.SOURCE, then the requests stops from being processed. <br>
+			* The EB.API hooks used by this interface are EB.TABLE.PROCEDURES.AFTER.AUTH.HOOK, EB.TABLE.PROCEDURES.AFTER.UNAU.HOOK, VERSION.AUTH.ROUTINE.HOOK and VERSION.AFTER.UNAU.RTN.HOOK.<br>
+			* The T24 fields specifying this hook are the AFTER.AUTH.PROC and AFTER.UNAU.PROC fields in EB.TABLE.PROCEDURES, the AUTH.ROUTINE and AFTER.UNAU.RTN fields 
+			* in VERSION and the AUTH.RTN and AFTER.UNAU.PROC fields in VERSION.CONTROL.<br>
+
+defaultFieldValues()	
+			* This interface enables the implementer to return the record modified with default values.<br>
+			* This interface is invoked when a record is submitted for validation or first loaded for modification.<br>
+			* The EB.API hooks used by this interface is EB.TABLE.PROCEDURES.CHECK.REC.HOOK, VERSION.CHECK.REC.RTN.HOOK and VERSION.DEFAULT.ROUTINE.HOOK.<br>
+			* The T24 field specifying this hook is the CHECK.REC.PROC field in EB.TABLE.PROCEDURES.
+
+validateRecord()	
+		       * This interface enables the implementer to return a validationResponse whose errors and enrichments will be processed at this stage.<br>
+			* An error is a validation failure of a field in the record, the record cannot be committed until all errors are fixed.<br>
+			* An enrichment provides information about a field for instance the currency of an account or the name of a customer.<br>
+			* The record can be modified but only local fields will be accepted, this means all fields when processing a record for a local table.<br>
+			* This interface is invoked when the user validate a record.<br>
+											* The EB.API hook used by this interface is VERSION.INPUT.ROUTINE.HOOK and EB.TABLE.PROCEDURES.CROSSVAL.HOOK.<br>
+											* The T24 field specifying this hook is the CROSSVAL.PROC field in EB.TABLE.PROCEDURES and INPUT.ROUTINE in VERSION and VERSION.CONTROL.<br>
+    	
+defaultFieldValuesOnHotField()
+		    * This interface enables the implementer to return the record modified with default values.<br>
+			* This interface is invoked when a hot field is exited while the record is being edited.<br>
+			* The EB.API hook used by this interface is VERSION.DEFAULT.ROUTINE.HOOK.<br>
+			* The T24 field specifying this hook is the DEFAULT.ROUTINE in VERSION and VERSION.CONTROL.<br>
+
+updateRecord()
+	         This interface enables the implementer to define one or more records to be input during the current transaction using the specified versions and ids.<br>
+			* If no version is specified then no action will be taken. <br>
+			* This interface is invoked when a record is authorised.<br>
+			* The EB.API hooks used by this interface are EB.TABLE.PROCEDURES.BEF.AUTH.HOOK and VERSION.BEFORE.AUTH.RTN.HOOK.<br>
+			* The T24 fields specifying this hook are the BEF.AUTH.PROC field in EB.TABLE.PROCEDURES and BEFORE.AUTH.RTN in VERSION and VERSION.CONTROL.<br>
+
+validateField(Deprecated)
+			 This interface enables the implementer to return a validationResponse whose errors and enrichments will be processed at this stage.<br>
+			* An error is a validation failure of a field in the record and the record cannot be committed until all errors are fixed.<br>
+			* An enrichment provides information about a field for instance the currency of an account or the name of a customer.<br>
+			* Only Local reference fields can be modified in the record, changes to core fields will be ignored.<br>
+			* This interface is invoked when the user validate a record.<br>
+			* The EB.API hook used by this interface is VERSION.FIELD.VAIDATION.RTN.HOOK.<br>
+			* The T24 field specifying this hook is the VALIDATION.RTN field in VERSION and VERSION.CONTROL.<br>
+			@deprecated Use defaultFieldValues() or validateRecord() instead.<br>
+
+checkId()
+			 This interface enables the implementer to return a record id which has been validated and potentially modified.<br>
+			* This interface is invoked after a record id is entered.<br>
+			* The EB.API hook used by this interface is VERSION.ID.RTN.HOOK and EB.TABLE.PROCEDURES.CHECK.ID.HOOK.<br>
+			* The T24 field specifying this hook is the CHECK.ID.PROC field in EB.TABLE.PROCEDURES and ID.RTN in VERSION and VERSION.CONTROL.<br>
+
+enableAutomaticAuthorisation()
+			* This interface enables the implementer to write custom logic that decides whether to authorise a (valid) transaction automatically.<br>
+			* Return true to indicate that the transaction should be authorised automatically.
+			* This interface is invoked during the transaction commit phase (during UNAUTH.RECORD.WRITE) after it has passed validation.<br>
+			* This method will not be invoked if it is the first transaction in the queue and the number of authorisers on the VERSION record specifying this interface is zero.
+			* <br/><b>T24 Details:</b> The EB.API hook used by this interface is EB.STP.CONDITION.FIELD.NAME.HOOK.
+
+getLookupRecordAmendments()	
+		    This interface enables the implementer to amend multiple lookup table records by adding and removing their related ids.<br>
+			* This interface is invoked when an unauthorised record is comitted and when a record is authorised.<br>
+			* <br/><b>T24 Details:</b> The EB.API hooks used by this interface are VERSION.AFTER.UNAU.RTN.HOOK, EB.TABLE.PROCEDURES.AFTER.UNAU.HOOK, EB.TABLE.PROCEDURES.BEF.AUTH.HOOK and VERSION.BEFORE.AUTH.RTN.HOOK.<br>
+			* The T24 fields specifying this hook are the AFTER.UNAU.PROC and BEF.AUTH.PROC fields in EB.TABLE.PROCEDURES and the AFTER.UNAU.RTN and BEFORE.AUTH.RTN in VERSION and VERSION.CONTROL.<br>
+			* In T24 terms the returned LookupRecordAmendments are passed to EB.TransactionControl.ConcatFileUpdate to make a number of updates to CONCAT file records.
+			* The CONCAT record will be deleted when the last remaining related id is removed.<br>
+ 		
+getServiceControlDetail()
+			* This interface enables the implementer to return a ServiceControl object. <br>
+			* On return the object will be used to start, stop or send a message to a service. <br>
+			* The Service must already be defined on the TSA.SERVICE table - with or without the company prefix (mnemonic/service). <br>
+			* This interface is invoked when a record is authorised.<br>
+			* The EB.API hooks used by this interface are EB.TABLE.PROCEDURES.AFTER.AUTH.HOOK and VERSION.AUTH.ROUTINE.HOOK.<br>
+			* The T24 fields specifying this hook are the AFTER.AUTH.PROC field in EB.TABLE.PROCEDURES and AUTH.ROUTINE in VERSION and AUTH.RTN in VERSION.CONTROL.<br>
+
+formatDealSlip()
+			 * This interface enables the implementer to return the formatted field values.<br>
+			* This interface is invoked during the input function on VERSION>D.SLIP.FUNCTION through PRODUCE.DEAL.SLIP<br>
+			* The EB.API hook used by this interface is DEAL.SLIP.FORMAT.HOOK.<br>
+			* The T24 field specifying this hook is the DEAL.SLIP.FORMAT>FORMAT.<br>
+
+updateLookupTable(Deprecated)
+isOverrideAutoApprove()
+setOverrideComparisonValue()
+
+
+																									
+																									InfoBasic Method Rtn (Routine kn si or kha laga gi)
+
+
+
+-Odata
+O.DATA is the common variable that holds the last extracted value
+O.DATA is a common variable that holds the last extracted value in the enquiry. 
+This is similar to the variable COMI in I_COMMON which holds the last entered 
+value.

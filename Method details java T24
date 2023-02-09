@@ -41,7 +41,8 @@ postUpdateRequest()
 			* The T24 fields specifying this hook are the AFTER.AUTH.PROC and AFTER.UNAU.PROC fields in EB.TABLE.PROCEDURES, the AUTH.ROUTINE and AFTER.UNAU.RTN fields 
 			* in VERSION and the AUTH.RTN and AFTER.UNAU.PROC fields in VERSION.CONTROL.<br>
 
-defaultFieldValues()	
+defaultFieldValues()	  (USE ON DEFAULT ROUTINE AND CHECK REC RTN)
+
 			* This interface enables the implementer to return the record modified with default values.<br>
 			* This interface is invoked when a record is submitted for validation or first loaded for modification.<br>
 			* The EB.API hooks used by this interface is EB.TABLE.PROCEDURES.CHECK.REC.HOOK, VERSION.CHECK.REC.RTN.HOOK and VERSION.DEFAULT.ROUTINE.HOOK.<br>
@@ -56,11 +57,14 @@ validateRecord()
 											* The EB.API hook used by this interface is VERSION.INPUT.ROUTINE.HOOK and EB.TABLE.PROCEDURES.CROSSVAL.HOOK.<br>
 											* The T24 field specifying this hook is the CROSSVAL.PROC field in EB.TABLE.PROCEDURES and INPUT.ROUTINE in VERSION and VERSION.CONTROL.<br>
     	
-defaultFieldValuesOnHotField()
+defaultFieldValuesOnHotField() (USE DEFAULT ROUTINE AND VERSION.CONTROL)
+
 		    * This interface enables the implementer to return the record modified with default values.<br>
 			* This interface is invoked when a hot field is exited while the record is being edited.<br>
 			* The EB.API hook used by this interface is VERSION.DEFAULT.ROUTINE.HOOK.<br>
 			* The T24 field specifying this hook is the DEFAULT.ROUTINE in VERSION and VERSION.CONTROL.<br>
+
+	
 
 updateRecord()
 	         This interface enables the implementer to define one or more records to be input during the current transaction using the specified versions and ids.<br>

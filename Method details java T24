@@ -1,6 +1,9 @@
+Routines name = method name
+
 Validation Routine = Validatefiled 
 input Rountine = ValidateRecord (WHEN PRESS VALIDATE BUTTON) ATTACH INPUT ROUTINE AND IT CANNOT BE EXECTUE COMMIT BUTTON IT WILL RUN JUST VALIDATE BUTTON
-Check Routine = DefaultFieldValues
+Check REC Routine AND Default routine == DefaultFieldValues
+Default RoUtine == DefaultFieldValuesOnHotField
 Auth Routine = UpdatelookupTable
 
 
@@ -41,8 +44,7 @@ postUpdateRequest()
 			* The T24 fields specifying this hook are the AFTER.AUTH.PROC and AFTER.UNAU.PROC fields in EB.TABLE.PROCEDURES, the AUTH.ROUTINE and AFTER.UNAU.RTN fields 
 			* in VERSION and the AUTH.RTN and AFTER.UNAU.PROC fields in VERSION.CONTROL.<br>
 
-defaultFieldValues()	  (USE ON DEFAULT ROUTINE AND CHECK REC RTN)
-
+defaultFieldValues()	
 			* This interface enables the implementer to return the record modified with default values.<br>
 			* This interface is invoked when a record is submitted for validation or first loaded for modification.<br>
 			* The EB.API hooks used by this interface is EB.TABLE.PROCEDURES.CHECK.REC.HOOK, VERSION.CHECK.REC.RTN.HOOK and VERSION.DEFAULT.ROUTINE.HOOK.<br>
@@ -54,17 +56,14 @@ validateRecord()
 			* An enrichment provides information about a field for instance the currency of an account or the name of a customer.<br>
 			* The record can be modified but only local fields will be accepted, this means all fields when processing a record for a local table.<br>
 			* This interface is invoked when the user validate a record.<br>
-											* The EB.API hook used by this interface is VERSION.INPUT.ROUTINE.HOOK and EB.TABLE.PROCEDURES.CROSSVAL.HOOK.<br>
-											* The T24 field specifying this hook is the CROSSVAL.PROC field in EB.TABLE.PROCEDURES and INPUT.ROUTINE in VERSION and VERSION.CONTROL.<br>
+			* The EB.API hook used by this interface is VERSION.INPUT.ROUTINE.HOOK and EB.TABLE.PROCEDURES.CROSSVAL.HOOK.<br>
+			* The T24 field specifying this hook is the CROSSVAL.PROC field in EB.TABLE.PROCEDURES and INPUT.ROUTINE in VERSION and VERSION.CONTROL.<br>
     	
-defaultFieldValuesOnHotField() (USE DEFAULT ROUTINE AND VERSION.CONTROL)
-
+defaultFieldValuesOnHotField()
 		    * This interface enables the implementer to return the record modified with default values.<br>
 			* This interface is invoked when a hot field is exited while the record is being edited.<br>
 			* The EB.API hook used by this interface is VERSION.DEFAULT.ROUTINE.HOOK.<br>
 			* The T24 field specifying this hook is the DEFAULT.ROUTINE in VERSION and VERSION.CONTROL.<br>
-
-	
 
 updateRecord()
 	         This interface enables the implementer to define one or more records to be input during the current transaction using the specified versions and ids.<br>
